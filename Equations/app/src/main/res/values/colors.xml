@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimarySimple">#dc94d0</color>
+    <color name="colorPrimaryLight">#d97dc8</color>
+    <color name="colorPrimaryWave">#ba33a3</color>
+    <color name="colorPrimary">#ec7cd9</color>
+    <color name="colorPrimaryDark">#ec7cd9</color>
+    <color name="colorAccent">#ec7cd9</color>
+    <color name="colorPrimaryRipple">#dc61c7</color>
+
+    <color name="whiteLight">#ffffff</color>
+    <color name="whiteDivideLine">#f1f1f1</color>
+    <color name="whitePrimary">#dcdddf</color>
+    <color name="whiteDark">#cbcdcf</color>
+
+    <color name="grey">#b4b3b3</color>
+
+    <color name="transparent">#00000000</color>
+
+    <color name="blackPrimary">#000000</color>
+    <color name="blackLight">#c8000000</color>
+</resources>
