@@ -1,4 +1,4 @@
-package com.hyx.hku.equations;
+package com.hyx.hku.equations.activitys;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +8,9 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.hyx.hku.equations.utils.APPString;
+import com.hyx.hku.equations.R;
+import com.hyx.hku.equations.utils.UIHelper;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -28,6 +31,7 @@ public class SplashActivity extends AppCompatActivity {
       @Override
       public void run() {
         UIHelper.showHome(SplashActivity.this);
+        finish();
       }
     }, 2000);
   }

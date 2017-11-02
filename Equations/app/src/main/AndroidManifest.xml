@@ -3,18 +3,18 @@
           package="com.hyx.hku.equations">
 
     <application
-        android:name=".MyApplication"
+        android:name=".application.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".HomePageActivity"
+            android:name=".activitys.HomePageActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".SplashActivity"
+            android:name=".activitys.SplashActivity"
             android:theme="@style/AppTheme.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".QuestionActivity"
+            android:name=".activitys.QuestionActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden">
         </activity>

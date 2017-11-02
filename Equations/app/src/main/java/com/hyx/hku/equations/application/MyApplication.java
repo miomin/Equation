@@ -1,4 +1,4 @@
-package com.hyx.hku.equations;
+package com.hyx.hku.equations.application;
 
 import android.app.Application;
 

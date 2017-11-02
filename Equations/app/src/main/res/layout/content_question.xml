@@ -2,121 +2,137 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.hyx.hku.equations.QuestionActivity"
     tools:showIn="@layout/activity_question">
 
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:id="@+id/container"
+        android:layout_width="395dp"
+        android:layout_height="587dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
+            <android.support.v7.widget.CardView
                 android:id="@+id/layout_question"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
                 android:layout_marginTop="32dp"
-                android:background="@drawable/img_card_background"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardElevation="6dp"
+                card_view:cardCornerRadius="9dp">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tv_question_number"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="Question 1"
-                            android:textColor="@android:color/black"
-                            android:textSize="18sp"
-                            android:textStyle="bold"/>
-
-                        <TextView
-                            android:id="@+id/tv_question"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:text="The equation : "
-                            android:textColor="@android:color/black"
-                            android:textSize="16sp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:text="What is x and y?"
-                            android:textColor="@android:color/black"
-                            android:textSize="16sp"/>
-
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:paddingLeft="16dp"
-                    android:paddingTop="16dp">
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/tv_left_time"
-                        android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_question_number"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="Question 1"
+                                android:textColor="@android:color/black"
+                                android:textSize="18sp"
+                                android:textStyle="bold"/>
+
+                            <TextView
+                                android:id="@+id/tv_question"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:text="The equation : "
+                                android:textColor="@android:color/black"
+                                android:textSize="16sp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="What is x and y?"
+                                android:textColor="@android:color/black"
+                                android:textSize="16sp"/>
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/shape_age"
-                        android:gravity="center"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp"
-                        android:text="Total Time"
-                        android:textColor="#FFFFFF"
-                        android:textSize="14sp"/>
-
-                    <TextView
-                        android:id="@+id/tv_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="9dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_toRightOf="@id/tv_left_time"
-                        android:background="@drawable/shape_constellation"
-                        android:gravity="center"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp"
-                        android:text="00:00:00"
-                        android:textColor="#FFFFFF"
-                        android:textSize="14sp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/tv_left_time"
-                        android:layout_marginTop="5dp"
-                        android:text="You will be asked to provide a value of x. And click the button 'Submit'"
-                        android:textColor="@color/blackLight"/>
-
-                </RelativeLayout>
+                        android:layout_marginBottom="16dp"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="16dp">
 
 
-            </LinearLayout>
+                        <TextView
+                            android:id="@+id/tv_left_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/shape_age"
+                            android:gravity="center"
+                            android:paddingLeft="12dp"
+                            android:paddingRight="12dp"
+                            android:text="Total Time"
+                            android:textColor="#FFFFFF"
+                            android:textSize="14sp"/>
+
+                        <TextView
+                            android:id="@+id/tv_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_toRightOf="@id/tv_left_time"
+                            android:background="@drawable/shape_constellation"
+                            android:gravity="center"
+                            android:paddingLeft="12dp"
+                            android:paddingRight="12dp"
+                            android:text="00:00:00"
+                            android:textColor="#FFFFFF"
+                            android:textSize="14sp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tv_left_time"
+                            android:layout_marginTop="5dp"
+                            android:text="You will be asked to provide a value of x. And click the button 'Submit'"
+                            android:textColor="@color/blackLight"/>
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
 
             <LinearLayout
                 android:id="@+id/layout_answer_x"
