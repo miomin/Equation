@@ -1,5 +1,8 @@
 package com.hyx.hku.equations.activitys;
 
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.hyx.hku.equations.R;
+import com.hyx.hku.equations.model.Question;
 
 import net.lemonsoft.lemonhello.LemonHello;
 import net.lemonsoft.lemonhello.LemonHelloAction;
@@ -22,7 +26,7 @@ import net.lemonsoft.lemonhello.LemonHelloInfo;
 import net.lemonsoft.lemonhello.LemonHelloView;
 import net.lemonsoft.lemonhello.interfaces.LemonHelloActionDelegate;
 
-import java.util.Random;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -30,28 +34,30 @@ public class QuestionActivity extends AppCompatActivity {
 
   private TextView tv_question;
   private TextView tv_question_number;
-  private EditText et_answer_x;
-  private EditText et_answer_y;
+  private EditText et_answer_x1;
+  private EditText et_answer_x2;
   private TextView tv_time;
   private ViewGroup container;
   private FloatingActionButton fab;
   private Button btnSubmit;
   private Button btnNext;
+  private View layout_answer_x2;
+  private TextView tvResult;
 
-  private int A;
-  private int B;
-  private int C;
+  private MediaPlayer player;
 
-  private double x;
-  private double y;
+  private ArrayList<Question> question_list = new ArrayList<>();
 
   private int index = 0;
-
-  private boolean isMusicOpen = false;
 
   private Timer timer = new Timer();
 
   private int seconds = 0;
+
+  private long startTime;
+  private long endTime;
+
+  private boolean next_tips = true;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +77,7 @@ public class QuestionActivity extends AppCompatActivity {
     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+        question_list.clear();
         finish();
       }
     });
@@ -78,12 +85,14 @@ public class QuestionActivity extends AppCompatActivity {
     fab = (FloatingActionButton) findViewById(R.id.fab);
     tv_question = (TextView) findViewById(R.id.tv_question);
     tv_question_number = (TextView) findViewById(R.id.tv_question_number);
-    et_answer_x = (EditText) findViewById(R.id.et_answer_x);
-    et_answer_y = (EditText) findViewById(R.id.et_answer_y);
+    et_answer_x1 = (EditText) findViewById(R.id.et_answer_x1);
+    et_answer_x2 = (EditText) findViewById(R.id.et_answer_x2);
     tv_time = (TextView) findViewById(R.id.tv_time);
     container = (ViewGroup) findViewById(R.id.container);
     btnSubmit = (Button) findViewById(R.id.btnSubmit);
     btnNext = (Button) findViewById(R.id.btnNext);
+    layout_answer_x2 = findViewById(R.id.layout_answer_x2);
+    tvResult = (TextView) findViewById(R.id.tvResult);
 
     ViewGroup.LayoutParams lp = container.getLayoutParams();
     lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -95,48 +104,102 @@ public class QuestionActivity extends AppCompatActivity {
     btnSubmit.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+
         if (isLinear()) {
-          if (TextUtils.isEmpty(et_answer_x.getText())) {
-            et_answer_x.requestFocus();
-            et_answer_x.setError("Please input your answer!", getResources().getDrawable(R.drawable.error));
+          if (TextUtils.isEmpty(et_answer_x1.getText())) {
+            et_answer_x1.requestFocus();
+            et_answer_x1.setError("Please input your answer!", getResources().getDrawable(R.drawable.error));
             return;
           }
         } else {
-          if (TextUtils.isEmpty(et_answer_x.getText())) {
-            et_answer_x.requestFocus();
-            et_answer_x.setError("Please input your answer!", getResources().getDrawable(R.drawable.error));
+          if (TextUtils.isEmpty(et_answer_x1.getText())) {
+            et_answer_x1.requestFocus();
+            et_answer_x1.setError("Please input your answer!", getResources().getDrawable(R.drawable.error));
             return;
           }
-          if (TextUtils.isEmpty(et_answer_y.getText())) {
-            et_answer_y.requestFocus();
-            et_answer_y.setError("Please input your answer!", getResources().getDrawable(R.drawable.error));
+          if (TextUtils.isEmpty(et_answer_x2.getText())) {
+            et_answer_x2.requestFocus();
+            et_answer_x2.setError("Please input your answer!", getResources().getDrawable(R.drawable.error));
             return;
           }
         }
 
-        calculateResult();
+        double answer_x1 = 0.0;
+        double answer_x2 = 0.0;
 
-        if (checkResult()) {
-          Snackbar.make(v, "Correct answer.", Snackbar.LENGTH_LONG).show();
-        } else {
-          Snackbar.make(v, "Wrong answer.", Snackbar.LENGTH_LONG).show();
+        try {
+          answer_x1 = Double.parseDouble(et_answer_x1.getText().toString());
+        } catch (NumberFormatException e) {
+          et_answer_x1.requestFocus();
+          et_answer_x1.setError("Invalid input!", getResources().getDrawable(R.drawable.error));
+          return;
         }
 
-        if (index == 9) {
-          submit();
+        if (!isLinear()) {
+          try {
+            answer_x2 = Double.parseDouble(et_answer_x2.getText().toString());
+          } catch (NumberFormatException e) {
+            et_answer_x2.requestFocus();
+            et_answer_x2.setError("Invalid input!", getResources().getDrawable(R.drawable.error));
+            return;
+          }
         }
+
+        Question current_question = question_list.get(index);
+
+        endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+        current_question.setTimes(Math.round(duration * 100) / 100.0 / 1000.0);
+
+        current_question.answer(answer_x1, answer_x2);
+
+        if (index < 9) {
+          if (current_question.isCorrect()) {
+            tvResult.setText("Correct answer!" + "\n");
+          } else {
+            tvResult.setText("Wrong answer!" + "\n" +
+                    "The correct value of X1 is: " + current_question.getSolution_x1() + "\n"
+                    + "The correct value of X2 is: " + current_question.getSolution_x2());
+          }
+        } else if (index == 9) {
+          showResult();
+        }
+
+        btnSubmit.setEnabled(false);
       }
     });
 
     btnNext.setOnClickListener(new View.OnClickListener() {
       @Override
-      public void onClick(View v) {
-        if (index < 9) {
-          index++;
-          tv_question.setText("The equation : " + generaterQuestion(index));
-          tv_question_number.setText("Question: " + (index + 1));
+      public void onClick(final View v) {
+
+        if (next_tips && question_list.get(index).getQuestionState() == Question.QUESTION_STATE.GIVEN_UP) {
+          LemonHello.getInformationHello("Prompt", "Are you sure you want to give up?")
+                  .addAction(new LemonHelloAction("No", new LemonHelloActionDelegate() {
+                    @Override
+                    public void onClick(LemonHelloView helloView, LemonHelloInfo helloInfo, LemonHelloAction helloAction) {
+                      helloView.hide();
+                    }
+                  }))
+                  .addAction(new LemonHelloAction("Yes", Color.RED, new LemonHelloActionDelegate() {
+                    @Override
+                    public void onClick(LemonHelloView helloView, LemonHelloInfo helloInfo, LemonHelloAction helloAction) {
+                      helloView.hide();
+                      if (index < 9) {
+                        index++;
+                        showNextQuestion();
+                      }
+                    }
+                  }))
+                  .show(QuestionActivity.this);
+          next_tips = false;
         } else {
-          Snackbar.make(v, "This is the last question.", Snackbar.LENGTH_LONG).show();
+          if (index < 9) {
+            index++;
+            showNextQuestion();
+          } else {
+            showResult();
+          }
         }
       }
     });
@@ -144,13 +207,13 @@ public class QuestionActivity extends AppCompatActivity {
     fab.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        if (isMusicOpen) {
+        if (player.isPlaying()) {
+          player.pause();
           Snackbar.make(view, "The music is already close! ", Snackbar.LENGTH_LONG).show();
-          isMusicOpen = false;
           fab.setImageResource(R.drawable.music_open);
         } else {
+          player.start();
           Snackbar.make(view, "The music is already open! ", Snackbar.LENGTH_LONG).show();
-          isMusicOpen = true;
           fab.setImageResource(R.drawable.music_close);
         }
       }
@@ -158,125 +221,43 @@ public class QuestionActivity extends AppCompatActivity {
   }
 
   private void setUpData() {
-    tv_question.setText("The equation : " + generaterQuestion(index));
 
-    timer.schedule(new TimerTask() {
-      @Override
-      public void run() {
-        seconds++;
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-          @Override
-          public void run() {
-            tv_time.setText(formatTime(seconds));
-          }
-        });
-      }
-    }, 0, 1000);
+    player = MediaPlayer.create(this, R.raw.bg_music);
+
+    LemonHello.getSuccessHello("Tips", "Click the SUBMIT button to submit your answers and click the next button to continue.\n\nNotes: If your answers are not integers, please round them to 2 decimal places.")
+            .addAction(new LemonHelloAction("OK, I Know!", new LemonHelloActionDelegate() {
+              @Override
+              public void onClick(LemonHelloView helloView, LemonHelloInfo helloInfo, LemonHelloAction helloAction) {
+                helloView.hide();
+                showNextQuestion();
+
+                timer.schedule(new TimerTask() {
+                  @Override
+                  public void run() {
+                    seconds++;
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                      @Override
+                      public void run() {
+                        tv_time.setText(formatTime(seconds));
+                      }
+                    });
+                  }
+                }, 0, 1000);
+              }
+            })).setIcon(BitmapFactory.decodeResource(getResources(), R.drawable.question))
+            .show(QuestionActivity.this);
   }
 
-  private String generaterQuestion(int index) {
-    if (index < 5)
-      return generaterLinearEquation();
-    else if (index < 10)
-      return generateQuadraticEquation();
-    return "";
+  public void cancel_x1(View view) {
+    et_answer_x1.setText("");
   }
 
-  private String generaterLinearEquation() {
-    StringBuilder question = new StringBuilder();
-    Random random = new Random();
-
-    A = random.nextInt(198) % (199) - 99;
-    B = random.nextInt(198) % (199) - 99;
-
-    if (A != 0)
-      question.append(A + "X");
-    if (B < 0) {
-      question.append(" - " + Math.abs(B));
-    } else if (B == 0) {
-    } else {
-      question.append(" + " + Math.abs(B));
-    }
-    question.append(" = 0");
-
-    return question.toString();
-  }
-
-  private String generateQuadraticEquation() {
-    StringBuilder question = new StringBuilder();
-    Random random = new Random();
-
-    A = random.nextInt(198) % (199) - 99;
-    B = random.nextInt(198) % (199) - 99;
-    C = random.nextInt(198) % (199) - 99;
-
-    if (A != 0)
-      question.append(A + "X^2");
-    if (B < 0) {
-      question.append(" - " + Math.abs(B) + "X");
-    } else if (B == 0) {
-    } else {
-      if (A != 0)
-        question.append(" + ");
-      question.append(Math.abs(B) + "Y");
-    }
-
-    if (C < 0) {
-      question.append(" - " + Math.abs(C));
-    } else if (C == 0) {
-    } else {
-      question.append(" + " + Math.abs(C));
-    }
-    question.append(" = 0");
-
-    return question.toString();
-  }
-
-  private void calculateResult() {
-    if (isLinear()) {
-      x = -((double) B / (double) A);
-      x = (double) (Math.round(x * 100) / 100.0);
-    } else {
-      x = (-B + Math.sqrt(B * B - 4 * A * C)) / (2 * (double) A);
-      y = (-B - Math.sqrt(B * B - 4 * A * C)) / (2 * (double) A);
-      x = (double) (Math.round(x * 100) / 100.0);
-      y = (double) (Math.round(y * 100) / 100.0);
-    }
-  }
-
-  private boolean checkResult() {
-    if (isLinear()) {
-      if (areEqual(x, Double.parseDouble(et_answer_x.getText().toString())))
-        return true;
-      else
-        return false;
-    } else {
-      if (areEqual(x, Double.parseDouble(et_answer_x.getText().toString())) && areEqual(y, Double.parseDouble(et_answer_y.getText().toString()))) {
-        return true;
-      } else if (areEqual(x, Double.parseDouble(et_answer_y.getText().toString())) && areEqual(y, Double.parseDouble(et_answer_x.getText().toString()))) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }
-
-  public void cancel_x(View view) {
-    et_answer_x.setText("");
-  }
-
-  public void cancel_y(View view) {
-    et_answer_y.setText("");
+  public void cancel_x2(View view) {
+    et_answer_x2.setText("");
   }
 
   private boolean isLinear() {
     return index < 5;
-  }
-
-  boolean areEqual(double A, double B) {
-    if (Math.abs(A - B) < 1e-6)
-      return true;
-    return false;
   }
 
   private String formatTime(int seconds) {
@@ -293,14 +274,73 @@ public class QuestionActivity extends AppCompatActivity {
     return sb.toString();
   }
 
-  private void submit() {
-    LemonHello.getSuccessHello("提示", "恭喜您，集成成功！")
-            .addAction(new LemonHelloAction("我知道啦", new LemonHelloActionDelegate() {
+  private void showResult() {
+
+    int count_correct = 0;
+    int count_wrong = 0;
+    int count_given_up = 0;
+
+    double total_time = 0;
+    int count = 0;
+
+    for (int i = 0; i < question_list.size(); i++) {
+      Question question = question_list.get(i);
+      switch (question.getQuestionState()) {
+        case CORRECT:
+          count_correct++;
+          total_time += question.getTimes();
+          count++;
+          break;
+        case WRONG:
+          count_wrong++;
+          total_time += question.getTimes();
+          count++;
+          break;
+        case GIVEN_UP:
+          count_given_up++;
+          break;
+      }
+    }
+
+    String content_correct = "Correct : " + count_correct;
+    String content_wrong = "Wrong : " + count_wrong;
+    String content_given_up = "Given up : " + count_given_up;
+
+    double avg_time = 0.00;
+    if (count > 0) {
+      avg_time = total_time / count;
+      avg_time = Math.round(avg_time * 100) / 100.0;
+    }
+
+    String content = content_correct + "\n" + content_wrong + '\n' + content_given_up + "\n" + "Average time : " + avg_time + "s";
+
+    LemonHello.getSuccessHello("You have finished all the questions", content)
+            .addAction(new LemonHelloAction("OK, I Know!", new LemonHelloActionDelegate() {
               @Override
               public void onClick(LemonHelloView helloView, LemonHelloInfo helloInfo, LemonHelloAction helloAction) {
                 helloView.hide();
+                finish();
               }
             }))
             .show(QuestionActivity.this);
+  }
+
+  private void showNextQuestion() {
+    Question default_question = new Question(index);
+    question_list.add(default_question);
+    tv_question.setText("The equation : " + default_question.getEquationStr());
+    tv_question_number.setText("Question  " + (index + 1));
+    tvResult.setText("");
+    btnSubmit.setEnabled(true);
+    et_answer_x1.setText("");
+    et_answer_x2.setText("");
+    if (index >= 5) {
+      layout_answer_x2.setVisibility(View.VISIBLE);
+    } else {
+      layout_answer_x2.setVisibility(View.GONE);
+    }
+    seconds = 0;
+    tv_time.setText(formatTime(seconds));
+    startTime = System.currentTimeMillis();
   }
 }

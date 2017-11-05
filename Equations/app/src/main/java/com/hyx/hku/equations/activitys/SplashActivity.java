@@ -24,7 +24,7 @@ public class SplashActivity extends AppCompatActivity {
     setContentView(R.layout.activity_splash);
 
     guideImage = (SimpleDraweeView) findViewById(R.id.guideImage);
-    Uri uri = Uri.parse("res://" + APPString.PACKAGE_NAME + "/" + R.drawable.welcome);
+    Uri uri = Uri.parse("res://" + APPString.PACKAGE_NAME + "/" + R.drawable.bg_welcome);
     guideImage.setImageURI(uri);
 
     new Handler().postDelayed(new Runnable() {

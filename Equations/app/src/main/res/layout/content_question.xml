@@ -11,8 +11,8 @@
 
     <ScrollView
         android:id="@+id/container"
-        android:layout_width="395dp"
-        android:layout_height="587dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
@@ -36,7 +36,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -65,16 +65,8 @@
                                 android:id="@+id/tv_question"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
-                                android:text="The equation : "
-                                android:textColor="@android:color/black"
-                                android:textSize="16sp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
                                 android:layout_marginTop="6dp"
-                                android:text="What is x and y?"
+                                android:text="The equation : "
                                 android:textColor="@android:color/black"
                                 android:textSize="16sp"/>
 
@@ -87,19 +79,18 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:paddingLeft="16dp"
-                        android:paddingTop="16dp">
-
+                        android:paddingRight="16dp"
+                        android:paddingTop="8dp">
 
                         <TextView
                             android:id="@+id/tv_left_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
                             android:background="@drawable/shape_age"
                             android:gravity="center"
                             android:paddingLeft="12dp"
                             android:paddingRight="12dp"
-                            android:text="Total Time"
+                            android:text="Time"
                             android:textColor="#FFFFFF"
                             android:textSize="14sp"/>
 
@@ -108,7 +99,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="9dp"
-                            android:layout_marginTop="5dp"
                             android:layout_toRightOf="@id/tv_left_time"
                             android:background="@drawable/shape_constellation"
                             android:gravity="center"
@@ -123,7 +113,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@id/tv_left_time"
                             android:layout_marginTop="5dp"
-                            android:text="You will be asked to provide a value of x. And click the button 'Submit'"
+                            android:text="You will be asked to provide a value of x. And click the button 'Submit'."
                             android:textColor="@color/blackLight"/>
 
                     </RelativeLayout>
@@ -135,7 +125,7 @@
 
 
             <LinearLayout
-                android:id="@+id/layout_answer_x"
+                android:id="@+id/layout_answer_x1"
                 android:layout_width="fill_parent"
                 android:layout_height="45dp"
                 android:layout_below="@id/layout_question"
@@ -150,17 +140,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Answer X"
+                    android:text="X1"
                     android:textColor="@color/blackLight"
                     android:textSize="16sp"/>
 
                 <EditText
-                    android:id="@+id/et_answer_x"
+                    android:id="@+id/et_answer_x1"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="25dp"
                     android:layout_weight="8"
-                    android:background="#ffffff"
+                    android:background="@color/transparent"
                     android:gravity="center_vertical"
                     android:hint="Please input your answer"
                     android:inputType="phone"
@@ -169,12 +159,12 @@
                     android:textSize="15sp"/>
 
                 <LinearLayout
-                    android:id="@+id/id_cancel_x"
+                    android:id="@+id/id_cancel_x1"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
                     android:clickable="true"
                     android:gravity="center"
-                    android:onClick="cancel_x">
+                    android:onClick="cancel_x1">
 
                     <ImageView
                         android:layout_width="20dp"
@@ -185,13 +175,13 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/layout_answer_y"
+                android:id="@+id/layout_answer_x2"
                 android:layout_width="fill_parent"
                 android:layout_height="45dp"
-                android:layout_below="@id/layout_answer_x"
+                android:layout_below="@id/layout_answer_x1"
                 android:layout_marginLeft="32dp"
                 android:layout_marginRight="32dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/bg_login_edit"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -200,17 +190,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Answer Y"
+                    android:text="X2"
                     android:textColor="@color/blackLight"
                     android:textSize="16sp"/>
 
                 <EditText
-                    android:id="@+id/et_answer_y"
+                    android:id="@+id/et_answer_x2"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="25dp"
                     android:layout_weight="8"
-                    android:background="#ffffff"
+                    android:background="@color/transparent"
                     android:gravity="center_vertical"
                     android:hint="Please input your answer"
                     android:inputType="phone"
@@ -219,12 +209,12 @@
                     android:textSize="15sp"/>
 
                 <LinearLayout
-                    android:id="@+id/id_cancel_y"
+                    android:id="@+id/id_cancel_x2"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
                     android:clickable="true"
                     android:gravity="center"
-                    android:onClick="cancel_y">
+                    android:onClick="cancel_x2">
 
                     <ImageView
                         android:layout_width="20dp"
@@ -234,10 +224,54 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <android.support.v7.widget.CardView
+                android:id="@+id/layout_result"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/layout_answer_x2"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
+                android:layout_marginTop="16dp"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardElevation="4dp"
+                card_view:cardCornerRadius="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:text="Result"
+                        android:textColor="@color/blackLight"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/tvResult"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:text=""
+                        android:textColor="@color/blackLight"/>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/layout_answer_y"
+                android:layout_below="@id/layout_result"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="32dp"
                 android:orientation="horizontal">
